@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -7,10 +7,11 @@ import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import { RootState } from '../../store';
-import { addSKU, updateSKU, removeSKU } from '../../store/skuSlice';
+import { addSKU, updateSKU, removeSKU, importSKUs  } from '../../store/skuSlice';
 import SKUItem from './SKUItem';
 import { SKU } from '../../types';
 import AddIcon from '@mui/icons-material/Add';
+import { sampleSKUs } from '../../utils/sampleData';
 
 const SKUList: React.FC = () => {
   const [newSkuName, setNewSkuName] = useState('');
@@ -49,6 +50,12 @@ const SKUList: React.FC = () => {
   const handleRemoveSKU = (id: string) => {
     dispatch(removeSKU(id));
 };
+
+useEffect(() => {
+  if (skus.length === 0) {
+    dispatch(importSKUs(sampleSKUs));
+  }
+}, [dispatch]);
 
 return (
   <Paper sx={{ p: 3 }}>

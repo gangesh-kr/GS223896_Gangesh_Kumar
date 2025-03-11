@@ -9,6 +9,11 @@ import { updateSalesUnit } from '../../store/planningSlice';
 import { Box, Paper } from '@mui/material';
 import { SKU, Store, CalendarWeek, PlanningData } from '../../types';
 
+import { ModuleRegistry } from 'ag-grid-community';
+import { ClientSideRowModelModule } from 'ag-grid-community';
+
+ModuleRegistry.registerModules([ClientSideRowModelModule]);
+
 const PlanningGrid: React.FC = () => {
   const dispatch = useDispatch();
   
@@ -45,6 +50,11 @@ const PlanningGrid: React.FC = () => {
   }, []);
   
   const rowData = useMemo(() => {
+    if (!weeks.length || !stores.length || !skus.length || !planningData.length) {
+      console.log('Missing data for rows');
+      return [];
+    }
+    
     const rows: any[] = [];
     
     sortedStores.forEach(store => {
@@ -76,7 +86,7 @@ const PlanningGrid: React.FC = () => {
     });
     
     return rows;
-  }, [sortedStores, skus, weeks, getSalesUnits, calculateSalesDollars, calculateGMDollars, calculateGMPercentage]);
+  }, [sortedStores, skus, weeks, planningData, getSalesUnits, calculateSalesDollars, calculateGMDollars, calculateGMPercentage]);
   
   const columnDefs = useMemo(() => {
     const cols: (ColDef | ColGroupDef)[] = [
@@ -95,87 +105,70 @@ const PlanningGrid: React.FC = () => {
         width: 150,
       },
     ];
-
-    const monthGroups: Record<string, CalendarWeek[]> = {};
+  
     weeks.forEach(week => {
-      if (!monthGroups[week.month]) {
-        monthGroups[week.month] = [];
-      }
-      monthGroups[week.month].push(week);
-    });
-
-    Object.entries(monthGroups).forEach(([month, monthWeeks]) => {
-      const monthColGroup: ColGroupDef = {
-        headerName: month,
-        children: [],
+      const weekColGroup: ColGroupDef = {
+        headerName: `Week ${week.weekNumber}`,
+        children: [
+          {
+            headerName: 'Sales Units',
+            field: `${week.id}_salesUnits`,
+            editable: true,
+            type: 'numericColumn',
+            width: 120,
+            valueParser: (params) => {
+              const value = Number(params.newValue);
+              return isNaN(value) ? 0 : Math.max(0, Math.round(value));
+            },
+            cellStyle: { backgroundColor: '#f2f2f2' },
+          },
+          {
+            headerName: 'Sales $',
+            field: `${week.id}_salesDollars`,
+            editable: false,
+            valueFormatter: (params) => {
+              return params.value != null
+                ? `$${params.value.toFixed(2)}`
+                : '';
+            },
+            type: 'numericColumn',
+            width: 120,
+          },
+          {
+            headerName: 'GM $',
+            field: `${week.id}_gmDollars`,
+            editable: false,
+            valueFormatter: (params) => {
+              return params.value != null
+                ? `$${params.value.toFixed(2)}`
+                : '';
+            },
+            type: 'numericColumn',
+            width: 120,
+          },
+          {
+            headerName: 'GM %',
+            field: `${week.id}_gmPercentage`,
+            editable: false,
+            valueFormatter: (params) => {
+              return params.value != null
+                ? `${params.value.toFixed(1)}%`
+                : '';
+            },
+            type: 'numericColumn',
+            width: 120,
+            cellStyle: (params) => {
+              const value = params.value as number;
+              if (value >= 40) return { backgroundColor: '#a5d6a7', color: 'black' };
+              if (value >= 30) return { backgroundColor: '#fff59d', color: 'black' };
+              if (value >= 10) return { backgroundColor: '#ffcc80', color: 'black' };
+              return { backgroundColor: '#ef9a9a', color: 'black' };
+            },
+          },
+        ],
       };
-
-      monthWeeks.forEach(week => {
-        const weekColGroup: ColGroupDef = {
-          headerName: `Week ${week.weekNumber}`,
-          children: [
-            {
-              headerName: 'Sales Units',
-              field: `${week.id}_salesUnits`,
-              editable: true,
-              type: 'numericColumn',
-              width: 120,
-              valueParser: (params) => {
-                const value = Number(params.newValue);
-                return isNaN(value) ? 0 : Math.max(0, Math.round(value));
-              },
-              cellStyle: { backgroundColor: '#f2f2f2' },
-            },
-            {
-              headerName: 'Sales $',
-              field: `${week.id}_salesDollars`,
-              editable: false,
-              valueFormatter: (params) => {
-                return params.value != null
-                  ? `$${params.value.toFixed(2)}`
-                  : '';
-              },
-              type: 'numericColumn',
-              width: 120,
-            },
-            {
-              headerName: 'GM $',
-              field: `${week.id}_gmDollars`,
-              editable: false,
-              valueFormatter: (params) => {
-                return params.value != null
-                  ? `$${params.value.toFixed(2)}`
-                  : '';
-              },
-              type: 'numericColumn',
-              width: 120,
-            },
-            {
-              headerName: 'GM %',
-              field: `${week.id}_gmPercentage`,
-              editable: false,
-              valueFormatter: (params) => {
-                return params.value != null
-                  ? `${params.value.toFixed(1)}%`
-                  : '';
-              },
-              type: 'numericColumn',
-              width: 120,
-              cellStyle: (params) => {
-                const value = params.value as number;
-                if (value >= 40) return { backgroundColor: '#a5d6a7', color: 'black' }; // Green
-                if (value >= 10) return { backgroundColor: '#fff59d', color: 'black' }; // Yellow
-                if (value > 5) return { backgroundColor: '#ffcc80', color: 'black' };  // Orange
-                return { backgroundColor: '#ef9a9a', color: 'black' };  // Red
-              },
-            },
-          ],
-        };
-        
-        monthColGroup.children.push(weekColGroup);
-      });
       
-      cols.push(monthColGroup);
+      cols.push(weekColGroup);
     });
     
     return cols;
@@ -205,8 +198,8 @@ const PlanningGrid: React.FC = () => {
   }, []);
   
   return (
-    <Paper sx={{ height: 'calc(100vh - 200px)', width: '100%', p: 2 }}>
-      <Box className="ag-theme-alpine" sx={{ height: '100%', width: '100%' }}>
+    <Paper sx={{ height: '100vh', width: '100%', p: 0, m: 0 }}>
+      <Box className="ag-theme-alpine" sx={{ height: '100vh', width: '100%' }}>
         <AgGridReact
           rowData={rowData}
           columnDefs={columnDefs}

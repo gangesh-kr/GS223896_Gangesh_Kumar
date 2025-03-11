@@ -11,7 +11,7 @@ const ChartPage: React.FC = () => {
   const [selectedStore, setSelectedStore] = useState<string>(stores.length > 0 ? stores[0].id : '');
   
   return (
-    <Container maxWidth={false} sx={{ mt: 10, mb: 4, px: 3 }}>
+    <Container maxWidth={false} sx={{ mb: 4, px: 3 }}>
       <Typography variant="h4" sx={{ mb: 4 }}>
         Performance Charts
       </Typography>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -6,9 +6,11 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import { RootState } from '../../store';
-import { addStore, updateStore, removeStore, reorderStore } from '../../store/storeSlice';
+import { addStore, updateStore, removeStore, reorderStore, importStores } from '../../store/storeSlice';
 import StoreItem from './StoreItem';
 import { Store } from '../../types';
+import { sampleStores } from '../../utils/sampleData';
+
 import AddIcon from '@mui/icons-material/Add';
 
 const StoreList: React.FC = () => {
@@ -24,6 +26,12 @@ const StoreList: React.FC = () => {
       setNewStoreName('');
     }
   };
+
+  useEffect(() => {
+    if (stores.length === 0) {
+      dispatch(importStores(sampleStores));
+    }
+  }, [dispatch])
 
   const handleUpdateStore = (updatedStore: Store) => {
     dispatch(updateStore(updatedStore));

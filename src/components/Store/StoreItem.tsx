@@ -35,7 +35,7 @@ const StoreItem: React.FC<StoreItemProps> = ({
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState(store.name);
-
+console.log(store, "store")
   const handleSave = () => {
     onUpdate({ ...store, name });
     setIsEditing(false);

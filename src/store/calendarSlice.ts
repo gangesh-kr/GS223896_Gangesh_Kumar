@@ -17,9 +17,11 @@ const generateSampleCalendar = (): CalendarWeek[] => {
   months.forEach(month => {
     for (let i = 1; i <= 4; i++) {
       const weekNumber = weekCounter++;
+      const formattedWeekNumber = weekNumber.toString().padStart(2, '0');
+      
       weeks.push({
-        id: `week-${weekNumber}`,
-        weekNumber,
+        id: `week-${formattedWeekNumber}`,
+        weekNumber: formattedWeekNumber,
         month,
         startDate: `${month.substring(0, 3)} ${(i - 1) * 7 + 1}`,
         endDate: `${month.substring(0, 3)} ${i * 7}`,

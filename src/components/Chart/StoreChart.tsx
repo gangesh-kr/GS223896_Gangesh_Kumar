@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { 
-  BarChart, 
+  // BarChart, 
   Bar, 
   XAxis, 
   YAxis, 
@@ -23,7 +23,7 @@ import {
   Box,
   SelectChangeEvent
 } from '@mui/material';
-import { SKU, Store, CalendarWeek, PlanningData } from '../../types';
+// import { SKU, Store, CalendarWeek, PlanningData } from '../../types';
 
 interface StoreChartProps {
   selectedStore: string;

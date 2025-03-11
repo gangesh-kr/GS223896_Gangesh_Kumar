@@ -6,6 +6,9 @@ export interface Store {
   
   export interface SKU {
     id: string;
+    // label: string;
+    class: string;
+    department: string;
     name: string;
     price: number;
     cost: number;
@@ -13,7 +16,7 @@ export interface Store {
   
   export interface CalendarWeek {
     id: string;
-    weekNumber: number;
+    weekNumber: string;
     month: string;
     startDate: string;
     endDate: string;

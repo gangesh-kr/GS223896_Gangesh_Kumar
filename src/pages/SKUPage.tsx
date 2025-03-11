@@ -6,7 +6,7 @@ import SKUList from '../components/SKU/SKUList';
 
 const SKUPage: React.FC = () => {
   return (
-    <Container maxWidth="lg" sx={{ mt: 10, mb: 4 }}>
+    <Container maxWidth="lg" sx={{ mb: 4 }}>
       <Typography variant="h4" sx={{ mb: 4 }}>
         SKU Management
       </Typography>
