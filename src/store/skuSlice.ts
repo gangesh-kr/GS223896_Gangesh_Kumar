@@ -23,7 +23,10 @@ const skuSlice = createSlice({
         name: action.payload.name,
         price: action.payload.price,
         cost: action.payload.cost,
+        class: action.payload.class || 'default-class', // Ensure default values
+        department: action.payload.department || 'default-dept',
       });
+      
     },
     updateSKU: (state, action: PayloadAction<SKU>) => {
       const index = state.skus.findIndex(sku => sku.id === action.payload.id);

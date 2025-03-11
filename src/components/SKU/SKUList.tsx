@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import Box from '@mui/material/Box';
+// import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -35,7 +35,10 @@ const SKUList: React.FC = () => {
         name: newSkuName.trim(),
         price,
         cost,
+        class: 'default-class', // Provide a valid class value
+        department: 'default-dept' // Provide a valid department value
       }));
+      
       
       setNewSkuName('');
       setNewSkuPrice('');

@@ -39,8 +39,8 @@ export const calculateGMPercentage = (salesDollars: number, gmDollars: number): 
  * @returns CSS color code
  */
 export const getGmPercentageColor = (gmPercentage: number): string => {
-  if (gmPercentage >= 40) return '#a5d6a7'; // Green
-  if (gmPercentage >= 10) return '#fff59d'; // Yellow
-  if (gmPercentage > 5) return '#ffcc80';  // Orange
-  return '#ef9a9a';  // Red
+  if (gmPercentage >= 40) return '#a5d6a7';
+  if (gmPercentage >= 10) return '#fff59d';
+  if (gmPercentage > 5) return '#ffcc80';
+  return '#ef9a9a';
 };

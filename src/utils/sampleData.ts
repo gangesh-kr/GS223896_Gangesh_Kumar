@@ -52,7 +52,7 @@ export const generateSamplePlanningData = (): PlanningData[] => {
   
   const generateWeeks = () => {
     const weeks = [];
-    let weekCounter = 1;
+    // let weekCounter = 1;
     
     for (let i = 1; i <= 12; i++) {
       const formattedWeekNumber = i.toString().padStart(2, '0');

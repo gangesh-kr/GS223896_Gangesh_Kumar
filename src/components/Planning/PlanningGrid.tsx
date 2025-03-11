@@ -7,7 +7,7 @@ import { CellValueChangedEvent, ColDef, ColGroupDef } from 'ag-grid-community';
 import { RootState } from '../../store';
 import { updateSalesUnit } from '../../store/planningSlice';
 import { Box, Paper } from '@mui/material';
-import { SKU, Store, CalendarWeek, PlanningData } from '../../types';
+// import { SKU, Store, CalendarWeek, PlanningData } from '../../types';
 
 import { ModuleRegistry } from 'ag-grid-community';
 import { ClientSideRowModelModule } from 'ag-grid-community';
@@ -159,7 +159,7 @@ const PlanningGrid: React.FC = () => {
             width: 120,
             cellStyle: (params) => {
               const value = params.value as number;
-              if (value >= 40) return { backgroundColor: '#a5d6a7', color: 'black' };
+              if (value >= 40) return { backgroundColor: '#a5d6a7', color: 'blue' };
               if (value >= 30) return { backgroundColor: '#fff59d', color: 'black' };
               if (value >= 10) return { backgroundColor: '#ffcc80', color: 'black' };
               return { backgroundColor: '#ef9a9a', color: 'black' };

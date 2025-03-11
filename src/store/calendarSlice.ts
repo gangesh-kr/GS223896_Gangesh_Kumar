@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { CalendarWeek } from '../types';
 
-interface CalendarState {
-  weeks: CalendarWeek[];
-}
+// interface CalendarState {
+//   weeks: CalendarWeek[];
+// }
 
-const initialState: CalendarState = {
-  weeks: [],
-};
+// const initialState: CalendarState = {
+//   weeks: [],
+// };
 
 const generateSampleCalendar = (): CalendarWeek[] => {
   const months = ['January', 'February', 'March'];
